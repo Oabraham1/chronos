@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  cuda-dev:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dev
+    runtime: nvidia
+    volumes:
+      - ./:/workspace
+    working_dir: /workspace
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
