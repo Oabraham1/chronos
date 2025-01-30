@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  chronos:
+    build: .
+    image: chronos:latest
+    volumes:
+      # Share lock directory between containers and host
+      - /tmp/chronos_locks:/tmp/chronos_locks
+    # To use NVIDIA GPUs
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    # Default command shows help
+    command: help

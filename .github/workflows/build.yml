@@ -1,0 +1,128 @@
+name: Chronos CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  release:
+    types: [ created ]
+
+permissions:
+  contents: write
+  packages: write 
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake ocl-icd-opencl-dev opencl-headers
+    
+    - name: Configure
+      run: |
+        mkdir -p build
+        cd build
+        cmake -DBUILD_TESTS=ON -DSKIP_OPENCL_TESTS=ON ..
+    
+    - name: Build
+      run: |
+        cd build
+        make -j$(nproc)
+    
+    - name: Test
+      run: |
+        cd build
+        ctest --output-on-failure
+    
+    - name: Package Binary
+      if: github.event_name == 'release'
+      run: |
+        cd build/bin
+        cp chronos_cli chronos-linux
+        strip chronos-linux
+        chmod +x chronos-linux
+    
+    - name: Upload Binary to Release
+      if: github.event_name == 'release'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./build/bin/chronos-linux
+        asset_name: chronos-linux
+        asset_content_type: application/octet-stream
+
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Configure
+      run: |
+        mkdir -p build
+        cd build
+        # Add exception handling flags and specify the library path
+        cmake -G "Visual Studio 17 2022" -A x64 -DBUILD_TESTS=ON -DSKIP_OPENCL_TESTS=ON -DCMAKE_CXX_FLAGS="/EHsc" ..
+    
+    - name: Build
+      run: |
+        cd build
+        # First build the static library
+        cmake --build . --config Release --target chronos_static
+        # Then build everything else
+        cmake --build . --config Release
+    
+    - name: Test
+      run: |
+        cd build
+        ctest -C Release --output-on-failure
+
+  build-macos:
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Configure
+      run: |
+        mkdir -p build
+        cd build
+        # On macOS, we can run all tests since OpenCL is always available
+        cmake -DBUILD_TESTS=ON ..
+    
+    - name: Build
+      run: |
+        cd build
+        make -j$(sysctl -n hw.ncpu)
+    
+    - name: Test
+      run: |
+        cd build
+        ctest --output-on-failure
+    
+    - name: Package Binary
+      if: github.event_name == 'release'
+      run: |
+        cd build/bin
+        cp chronos_cli chronos-macos
+        strip chronos-macos
+        chmod +x chronos-macos
+    
+    - name: Upload Binary to Release
+      if: github.event_name == 'release'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./build/bin/chronos-macos
+        asset_name: chronos-macos
+        asset_content_type: application/octet-stream
