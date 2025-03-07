@@ -1,0 +1,19 @@
+digraph "ChronosPartitioner::releasePartitionResources"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="RL";
+  Node1 [id="Node000001",label="ChronosPartitioner\l::releasePartitionResources",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="ChronosPartitioner\l::monitorPartitions",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$class_chronos_partitioner.html#aaabaca50b47355ab9e2de312b03780aa",tooltip=" "];
+  Node2 -> Node3 [id="edge2_Node000002_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="ChronosPartitioner\l::ChronosPartitioner",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$class_chronos_partitioner.html#a91bf207af6287bb3da7d66e6f00d843b",tooltip="Constructor initializes the partitioner."];
+  Node1 -> Node4 [id="edge3_Node000001_Node000004",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="ChronosPartitioner\l::releasePartition",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$class_chronos_partitioner.html#aa99f374f039590ca1c5f21855d5966b7",tooltip="Release a partition early."];
+  Node4 -> Node5 [id="edge4_Node000004_Node000005",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="main",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$main_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97",tooltip=" "];
+  Node1 -> Node6 [id="edge5_Node000001_Node000006",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node6 [id="Node000006",label="ChronosPartitioner\l::~ChronosPartitioner",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$class_chronos_partitioner.html#a806f12634e6e2d74313fb30562b73465",tooltip="Destructor cleans up resources."];
+}

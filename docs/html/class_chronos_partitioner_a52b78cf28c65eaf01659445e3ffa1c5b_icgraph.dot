@@ -1,0 +1,22 @@
+digraph "ChronosPartitioner::getCurrentUsername"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="RL";
+  Node1 [id="Node000001",label="ChronosPartitioner\l::getCurrentUsername",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="ChronosPartitioner\l::canAccessGPU",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$class_chronos_partitioner.html#a370df1dc51313f72dbe8861560770483",tooltip=" "];
+  Node2 -> Node3 [id="edge2_Node000002_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="ChronosPartitioner\l::createPartition",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$class_chronos_partitioner.html#a0fa066b1bb2cdb2a5d81ef34e94f4e69",tooltip="Create a new GPU partition."];
+  Node3 -> Node4 [id="edge3_Node000003_Node000004",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="main",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$main_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97",tooltip=" "];
+  Node1 -> Node5 [id="edge4_Node000001_Node000005",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="ChronosPartitioner\l::createLock",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$class_chronos_partitioner.html#a30c4a803f4f0f136846f647c576f0e82",tooltip=" "];
+  Node5 -> Node3 [id="edge5_Node000005_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node3 [id="edge6_Node000001_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node6 [id="edge7_Node000001_Node000006",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node6 [id="Node000006",label="ChronosPartitioner\l::releasePartition",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$class_chronos_partitioner.html#aa99f374f039590ca1c5f21855d5966b7",tooltip="Release a partition early."];
+  Node6 -> Node4 [id="edge8_Node000006_Node000004",dir="back",color="steelblue1",style="solid",tooltip=" "];
+}

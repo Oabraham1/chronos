@@ -1,0 +1,27 @@
+# Git
+.git
+.gitignore
+.github
+
+# Build directories
+build/
+bin/
+lib/
+
+# Documentation
+docs/
+
+# Editor and IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*~
+*.tmp
+*.bak
+
+# OS generated files
+.DS_Store
+Thumbs.db

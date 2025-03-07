@@ -1,20 +1,19 @@
 version: '3.8'
 
 services:
-  cuda-dev:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.dev
-    runtime: nvidia
+  chronos:
+    build: .
+    image: chronos:latest
     volumes:
-      - ./:/workspace
-    working_dir: /workspace
-    environment:
-      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+      # Share lock directory between containers and host
+      - /tmp/chronos_locks:/tmp/chronos_locks
+    # To use NVIDIA GPUs
     deploy:
       resources:
         reservations:
           devices:
             - driver: nvidia
-              count: 1
+              count: all
               capabilities: [gpu]
+    # Default command shows help
+    command: help

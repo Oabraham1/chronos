@@ -1,0 +1,26 @@
+digraph "ChronosPartitioner::createPartition"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="ChronosPartitioner\l::createPartition",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Create a new GPU partition."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="ChronosPartitioner\l::canAccessGPU",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$class_chronos_partitioner.html#a370df1dc51313f72dbe8861560770483",tooltip=" "];
+  Node2 -> Node3 [id="edge2_Node000002_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="ChronosPartitioner\l::fileExists",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$class_chronos_partitioner.html#a4782e103ba929bcadcfc4a886d406c4f",tooltip=" "];
+  Node2 -> Node4 [id="edge3_Node000002_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="ChronosPartitioner\l::generateLockFilePath",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$class_chronos_partitioner.html#aa9f3297abc122236af9dd2f2365d8c81",tooltip=" "];
+  Node2 -> Node5 [id="edge4_Node000002_Node000005",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="ChronosPartitioner\l::getCurrentUsername",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$class_chronos_partitioner.html#a52b78cf28c65eaf01659445e3ffa1c5b",tooltip=" "];
+  Node2 -> Node6 [id="edge5_Node000002_Node000006",color="steelblue1",style="solid",tooltip=" "];
+  Node6 [id="Node000006",label="ChronosPartitioner\l::readLockFileOwner",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$class_chronos_partitioner.html#a099a7e3d6d83822a5b3b5e150046dd2b",tooltip=" "];
+  Node1 -> Node7 [id="edge6_Node000001_Node000007",color="steelblue1",style="solid",tooltip=" "];
+  Node7 [id="Node000007",label="ChronosPartitioner\l::createLock",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$class_chronos_partitioner.html#a30c4a803f4f0f136846f647c576f0e82",tooltip=" "];
+  Node7 -> Node4 [id="edge7_Node000007_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node7 -> Node5 [id="edge8_Node000007_Node000005",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node8 [id="edge9_Node000001_Node000008",color="steelblue1",style="solid",tooltip=" "];
+  Node8 [id="Node000008",label="ChronosPartitioner\l::generatePartitionId",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$class_chronos_partitioner.html#a604b4240e9295f4cb7b0e0e71864a59f",tooltip=" "];
+  Node1 -> Node5 [id="edge10_Node000001_Node000005",color="steelblue1",style="solid",tooltip=" "];
+}
