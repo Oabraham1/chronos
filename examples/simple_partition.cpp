@@ -1,12 +1,20 @@
 /**
  * @file simple_partition.cpp
- * @brief Simple example of using Chronos GPU Partitioner
+ * @brief Simple example of using Chronos GPU Partitioner.
+ *
+ * This file demonstrates the basic usage of the Chronos library, including
+ * creating a partition, running a simulated GPU workload, and releasing
+ * the partition.
+ *
+ * @author Ojima Abraham
+ * @date 2025
+ * @copyright MIT License
  */
 
 #include "chronos.h"
+#include <chrono>
 #include <iostream>
 #include <thread>
-#include <chrono>
 
 /**
  * @brief Example function to simulate a GPU workload
@@ -14,19 +22,17 @@
  * @param partitionId ID of the GPU partition
  * @param durationSeconds How long to run the simulation
  */
-void simulateGpuWorkload(const std::string &partitionId, int durationSeconds)
-{
-    std::cout << "Starting GPU workload on partition " << partitionId << std::endl;
-    std::cout << "Working";
+void simulateGpuWorkload(const std::string &partitionId, int durationSeconds) {
+  std::cout << "Starting GPU workload on partition " << partitionId
+            << std::endl;
+  std::cout << "Working";
 
-    for (int i = 0; i < durationSeconds; i++)
-    {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        std::cout << "." << std::flush;
-    }
+  for (int i = 0; i < durationSeconds; i++) {
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::cout << "." << std::flush;
+  }
 
-    std::cout << std::endl
-              << "GPU workload completed" << std::endl;
+  std::cout << std::endl << "GPU workload completed" << std::endl;
 }
 
 /**
@@ -36,33 +42,32 @@ void simulateGpuWorkload(const std::string &partitionId, int durationSeconds)
  * @param argv Argument values
  * @return Exit code
  */
-int main(int argc, char *argv[])
-{
-    chronos::ChronosPartitioner partitioner;
+int main(int argc, char *argv[]) {
+  chronos::ChronosPartitioner partitioner;
 
-    partitioner.showDeviceStats();
+  partitioner.showDeviceStats();
 
-    int deviceIndex = 0;
-    float memoryFraction = 0.5;
-    int duration = 30;
+  int deviceIndex = 0;
+  float memoryFraction = 0.5;
+  int duration = 30;
 
-    std::cout << "Creating GPU partition..." << std::endl;
-    std::string partitionId = partitioner.createPartition(deviceIndex, memoryFraction, duration);
+  std::cout << "Creating GPU partition..." << std::endl;
+  std::string partitionId =
+      partitioner.createPartition(deviceIndex, memoryFraction, duration);
 
-    if (partitionId.empty())
-    {
-        std::cerr << "Failed to create partition" << std::endl;
-        return 1;
-    }
+  if (partitionId.empty()) {
+    std::cerr << "Failed to create partition" << std::endl;
+    return 1;
+  }
 
-    partitioner.listPartitions(true);
+  partitioner.listPartitions(true);
 
-    simulateGpuWorkload(partitionId, 10);
+  simulateGpuWorkload(partitionId, 10);
 
-    std::cout << "Releasing partition..." << std::endl;
-    partitioner.releasePartition(partitionId);
+  std::cout << "Releasing partition..." << std::endl;
+  partitioner.releasePartition(partitionId);
 
-    partitioner.showDeviceStats();
+  partitioner.showDeviceStats();
 
-    return 0;
+  return 0;
 }
