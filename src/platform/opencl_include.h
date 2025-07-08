@@ -15,7 +15,9 @@
 #define CHRONOS_OPENCL_INCLUDE_H
 
 #ifdef SKIP_OPENCL_TESTS
-// Mock OpenCL types and defines for CI environments without OpenCL
+#include <cstddef> // Include for size_t
+
+// Mock OpenCL types and defines for CI environments
 typedef void *cl_platform_id;
 typedef void *cl_device_id;
 typedef void *cl_context;
