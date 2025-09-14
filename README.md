@@ -195,7 +195,7 @@ partition: <partition_id>
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) file for details.
+Business Source License - see [LICENSE](LICENSE) file for details.
 
 ## Contact
 
