@@ -282,14 +282,14 @@ partition: <partition_id>
 - 🚧 Memory enforcement
 - 🚧 Configuration management
 
-### Phase 2: Enhanced Functionality (Q1 2025)
+### Phase 2: Enhanced Functionality (Q3 2025)
 - [ ] REST API
 - [ ] Python bindings
 - [ ] Performance metrics
 - [ ] Advanced schedulers
 - [ ] Web dashboard
 
-### Phase 3: Enterprise Features (Q2 2025)
+### Phase 3: Enterprise Features (Q4 2025)
 - [ ] Chronos Cloud agent
 - [ ] Multi-cluster support
 - [ ] Advanced monitoring
