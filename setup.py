@@ -70,7 +70,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="chronos-gpu",
-    version="1.0.0",
+    version="1.0.1",
     author="Ojima Abraham",
     author_email="abrahamojima2018@gmail.com",
     description="Fair GPU time-sharing with automatic expiration",

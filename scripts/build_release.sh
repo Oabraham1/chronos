@@ -3,7 +3,7 @@
 
 set -e
 
-VERSION="1.0.0"
+VERSION="1.0.1"
 PROJECT="chronos"
 BUILD_DIR="build-release"
 DIST_DIR="dist"

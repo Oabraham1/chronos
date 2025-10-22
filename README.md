@@ -325,7 +325,7 @@ If you use Chronos in research, please cite:
   author={Abraham, Ojima},
   year={2025},
   url={https://github.com/oabraham1/chronos},
-  version={1.0.0}
+  version={1.0.1}
 }
 ```
 

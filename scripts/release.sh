@@ -3,7 +3,7 @@
 
 set -e
 
-VERSION=${1:-"1.0.0"}
+VERSION=${1:-"1.0.1"}
 
 # Colors
 RED='\033[0;31m'
@@ -42,7 +42,7 @@ banner "Chronos v${VERSION} Release Script"
 
 # Validate version format
 if ! [[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-    error "Invalid version format. Use X.Y.Z (e.g., 1.0.0)"
+    error "Invalid version format. Use X.Y.Z (e.g., 1.0.1)"
     exit 1
 fi
 

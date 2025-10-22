@@ -1,6 +1,6 @@
 # Chronos v1.0 Performance Benchmarks
 
-Official performance measurements for Chronos GPU Partitioner v1.0.0
+Official performance measurements for Chronos GPU Partitioner v1.0.1
 
 ## Test Environment
 
