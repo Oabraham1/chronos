@@ -1,0 +1,46 @@
+# Doxyfile.in
+
+# Project details
+PROJECT_NAME           = "Chronos GPU Partitioner"
+PROJECT_NUMBER         = @PROJECT_VERSION@
+PROJECT_BRIEF          = "Fair GPU time-sharing with automatic expiration"
+OUTPUT_DIRECTORY       = @CMAKE_CURRENT_SOURCE_DIR@/docs
+CREATE_SUBDIRS         = YES
+OUTPUT_LANGUAGE        = English
+
+# Source code settings
+INPUT                  = @CMAKE_CURRENT_SOURCE_DIR@/include \
+                         @CMAKE_CURRENT_SOURCE_DIR@/src \
+                         @CMAKE_CURRENT_SOURCE_DIR@/apps \
+                         @CMAKE_CURRENT_SOURCE_DIR@/examples \
+                         @CMAKE_CURRENT_SOURCE_DIR@/benchmarks \
+                         @CMAKE_CURRENT_SOURCE_DIR@/README.md \
+                         @CMAKE_CURRENT_SOURCE_DIR@/docs/ALGORITHM.md
+RECURSIVE              = YES
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+EXTRACT_ANON_NSPACES   = YES
+
+# HTML output settings
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+HTML_FILE_EXTENSION    = .html
+HTML_HEADER            =
+HTML_FOOTER            =
+HTML_STYLESHEET        =
+HTML_COLORSTYLE_HUE    = 209
+HTML_COLORSTYLE_SAT    = 255
+HTML_COLORSTYLE_GAMMA  = 110
+GENERATE_TREEVIEW      = YES
+USE_MATHJAX            = YES
+
+# LaTeX output settings
+GENERATE_LATEX         = NO
+
+# Dot graph settings
+HAVE_DOT               = YES
+UML_LOOK               = YES
+UML_LIMIT_NUM_FIELDS   = 20
+CALL_GRAPH             = YES
+CALLER_GRAPH           = YES

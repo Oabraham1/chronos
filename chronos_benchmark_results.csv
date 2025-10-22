@@ -1,0 +1,5 @@
+Test Name,Mean (ms),StdDev (ms),Min (ms),Max (ms),Samples
+Partition Creation,0.649776,0.163336,0.178625,1.14225,100
+Partition Release,0.207312,0.0414356,0.12725,0.443583,100
+Scalability Test (Avg Creation),1.49301,0.453585,0.767917,2.10479,10
+Expiration Accuracy (Error),912.755,291.173,40.4508,1038.18,10

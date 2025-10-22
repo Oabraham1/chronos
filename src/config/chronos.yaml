@@ -1,0 +1,322 @@
+# Chronos Configuration File
+# This file contains all configurable options for the Chronos GPU Partitioner
+# Environment variables can override these settings using the CHRONOS_ prefix
+# For example: CHRONOS_CORE_LOCK_DIRECTORY=/custom/path
+
+chronos:
+  # Core system settings
+  core:
+    # Directory for inter-process lock files
+    lock_directory: /tmp/chronos_locks
+
+    # Directory for persistent state storage
+    state_directory: /var/lib/chronos
+
+    # Maximum number of partitions allowed per GPU
+    max_partitions_per_gpu: 10
+
+    # Enable experimental features
+    experimental_features: false
+
+  # Logging configuration
+  logging:
+    # Log level: DEBUG, INFO, WARN, ERROR, FATAL
+    level: INFO
+
+    # Output destination: console, file, both
+    output: console
+
+    # Log file path (when output includes 'file')
+    file_path: /var/log/chronos/chronos.log
+
+    # Log format: json, text
+    format: json
+
+    # Maximum log file size in MB before rotation
+    max_file_size_mb: 100
+
+    # Maximum number of rotated log files to keep
+    max_files: 10
+
+    # Include timestamps in log messages
+    include_timestamps: true
+
+    # Include source file and line numbers
+    include_source_location: false
+
+  # Memory management settings
+  memory:
+    # Enforce memory limits through OpenCL
+    enforce_limits: true
+
+    # Allow oversubscription (1.0 = no oversubscription)
+    oversubscription_ratio: 1.0
+
+    # Minimum allocation size in MB
+    allocation_granularity_mb: 256
+
+    # Memory defragmentation interval in seconds (0 = disabled)
+    defragmentation_interval_seconds: 0
+
+    # Track memory usage statistics
+    track_usage_stats: true
+
+  # Process monitoring settings
+  process:
+    # Interval for checking process health in seconds
+    monitor_interval_seconds: 5
+
+    # Automatically cleanup partitions from dead processes
+    cleanup_orphaned: true
+
+    # Time to wait before considering a process dead
+    zombie_timeout_seconds: 60
+
+    # Enable process priority inheritance
+    priority_inheritance: false
+
+    # Maximum process priority boost
+    max_priority_boost: 5
+
+  # Scheduler configuration
+  scheduler:
+    # Scheduler type: fifo, fair_share, priority, bin_packing
+    type: fifo
+
+    # Enable preemption (interrupting running partitions)
+    preemption_enabled: false
+
+    # Preemption check interval in seconds
+    preemption_interval_seconds: 10
+
+    # Minimum time a partition must run before preemption
+    min_runtime_before_preempt_seconds: 60
+
+    # Enable work stealing between GPUs
+    work_stealing_enabled: false
+
+    # Load balancing strategy: round_robin, least_loaded, best_fit
+    load_balancing: round_robin
+
+  # REST API configuration
+  api:
+    # Enable REST API server
+    enabled: false
+
+    # API server port
+    port: 8080
+
+    # API server host (0.0.0.0 for all interfaces)
+    host: 0.0.0.0
+
+    # Enable authentication
+    auth_enabled: false
+
+    # API key for authentication (generated if empty)
+    api_key: ""
+
+    # Rate limiting per minute per IP
+    rate_limit_per_minute: 60
+
+    # Enable CORS
+    cors_enabled: true
+
+    # Allowed CORS origins
+    cors_origins:
+      - "*"
+
+    # Enable API documentation endpoint
+    docs_enabled: true
+
+    # API documentation path
+    docs_path: /api/docs
+
+  # Metrics collection configuration
+  metrics:
+    # Enable metrics collection
+    enabled: true
+
+    # Metrics collection interval in seconds
+    collection_interval_seconds: 10
+
+    # Enable Prometheus metrics export
+    prometheus_enabled: false
+
+    # Prometheus metrics port
+    prometheus_port: 9090
+
+    # Metrics retention period in hours
+    retention_hours: 24
+
+    # Enable detailed GPU metrics
+    detailed_gpu_metrics: true
+
+    # Enable per-partition metrics
+    per_partition_metrics: true
+
+    # Metrics storage backend: memory, file, redis
+    storage_backend: memory
+
+    # Metrics file path (when backend is 'file')
+    metrics_file_path: /var/lib/chronos/metrics.db
+
+  # GPU-specific settings
+  gpu:
+    # List of GPU device indices to exclude
+    exclude_devices: []
+
+    # List of GPU device indices to prefer
+    prefer_devices: []
+
+    # Minimum GPU memory required (MB)
+    min_memory_mb: 1024
+
+    # GPU selection strategy: first_available, best_fit, round_robin
+    selection_strategy: first_available
+
+    # Enable GPU health checks
+    health_checks_enabled: true
+
+    # GPU health check interval in seconds
+    health_check_interval_seconds: 30
+
+    # Automatically blacklist unhealthy GPUs
+    auto_blacklist_unhealthy: true
+
+  # Python bindings configuration
+  python:
+    # Enable Python bindings
+    enabled: true
+
+    # Enable NumPy integration
+    numpy_integration: true
+
+    # Enable TensorFlow integration
+    tensorflow_integration: false
+
+    # Enable PyTorch integration
+    pytorch_integration: false
+
+    # Python garbage collection interval in seconds
+    gc_interval_seconds: 60
+
+  # Security settings
+  security:
+    # Enable security features
+    enabled: true
+
+    # Require user authentication for operations
+    require_auth: false
+
+    # Allow only owner to release partition
+    owner_only_release: true
+
+    # Enable audit logging
+    audit_logging: true
+
+    # Audit log path
+    audit_log_path: /var/log/chronos/audit.log
+
+    # Encrypt lock files
+    encrypt_locks: false
+
+    # Encryption key (generated if empty)
+    encryption_key: ""
+
+  # Notification settings
+  notifications:
+    # Enable notifications
+    enabled: false
+
+    # Notification methods: log, email, webhook
+    methods:
+      - log
+
+    # Events to notify: partition_created, partition_expired, gpu_unhealthy
+    events:
+      - partition_expired
+      - gpu_unhealthy
+
+    # Email configuration (when 'email' in methods)
+    email:
+      smtp_host: smtp.example.com
+      smtp_port: 587
+      from_address: chronos@example.com
+      to_addresses:
+        - admin@example.com
+
+    # Webhook configuration (when 'webhook' in methods)
+    webhook:
+      url: https://example.com/chronos-webhook
+      method: POST
+      headers:
+        Content-Type: application/json
+
+  # Advanced settings
+  advanced:
+    # Enable debug mode (verbose output)
+    debug_mode: false
+
+    # Enable performance profiling
+    enable_profiling: false
+
+    # Profiling output path
+    profiling_output_path: /var/log/chronos/profile.json
+
+    # Command execution timeout in seconds
+    command_timeout_seconds: 30
+
+    # Enable experimental OpenCL features
+    experimental_opencl: false
+
+    # OpenCL compiler flags
+    opencl_compiler_flags: ""
+
+    # Enable GPU memory compression
+    memory_compression: false
+
+    # Enable GPU memory encryption
+    memory_encryption: false
+
+    # Thread pool size for async operations
+    thread_pool_size: 4
+
+    # Enable telemetry collection (anonymous usage stats)
+    telemetry_enabled: false
+
+    # Telemetry server URL
+    telemetry_url: https://telemetry.oabraham1.github.io/chronos
+
+  # Plugin system configuration
+  plugins:
+    # Enable plugin system
+    enabled: false
+
+    # Plugin directory
+    plugin_directory: /usr/lib/chronos/plugins
+
+    # Auto-load plugins on startup
+    auto_load: true
+
+    # Plugin whitelist (empty = all allowed)
+    whitelist: []
+
+    # Plugin blacklist
+    blacklist: []
+
+  # Development settings (not for production)
+  development:
+    # Enable development mode
+    enabled: false
+
+    # Mock GPU devices for testing
+    mock_gpus: 0
+
+    # Mock GPU memory per device (MB)
+    mock_gpu_memory_mb: 8192
+
+    # Simulate GPU operations
+    simulate_operations: false
+
+    # Operation simulation delay (ms)
+    simulation_delay_ms: 100
