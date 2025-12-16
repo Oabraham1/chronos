@@ -48,6 +48,18 @@ class ChronosPartitioner {
     void showDeviceStats();
     float getGPUAvailablePercentage(int deviceIdx);
 
+    /**
+     * @brief Get the execution mode
+     * @return 0 for concurrent, 1 for time-sliced, 2 for stub
+     */
+    int getExecutionMode() const;
+
+    /**
+     * @brief Get the backend name
+     * @return Backend name string
+     */
+    std::string getBackendName() const;
+
    private:
     class Impl;
     std::unique_ptr<Impl> pImpl;

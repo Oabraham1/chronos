@@ -18,8 +18,8 @@ Like PostgreSQL, Redis, or Git:
 
 ---
 
-## v1.0 (Current) - Foundation
-**Status:** Shipping now! 🚢
+## v1.0 - Foundation
+**Status:** Complete ✅
 
 ### Core Features
 - [x] Time-based GPU partitioning
@@ -40,11 +40,45 @@ Like PostgreSQL, Redis, or Git:
 
 ---
 
-## v1.1 (Q1 2025) - Polish
+## v1.1 (Current) - True Concurrent Execution
+**Status:** Shipping now! 🚢
+
+### Multi-Backend Architecture
+- [x] Abstract backend interface
+- [x] NVIDIA MPS backend (true concurrent execution)
+- [x] AMD ROCm backend
+- [x] OpenCL backend (cross-vendor fallback)
+- [x] Stub backend (testing/CI)
+- [x] Auto-detection backend selector
+
+### New API
+- [x] `get_execution_mode()` - Returns "concurrent", "time_sliced", or "stub"
+- [x] `get_backend_name()` - Returns active backend name
+- [x] `check_concurrent_support()` - Check MPS/ROCm availability
+- [x] `CHRONOS_BACKEND` env var for manual override
+
+### Installation Improvements
+- [x] Graceful pip install fallback (stub mode when build fails)
+- [x] Platform-specific helpful error messages
+
+### Multiprocessing Support
+- [x] Fork-safe multiprocessing (`ForkSafePartition` for `multiprocessing.Pool`)
+- [x] Independent partitions across processes (Issue #2 fix)
+- [x] Globally unique partition IDs (PID + timestamp + counter)
+
+### Testing
+- [x] Integration tests for all backends
+- [x] Multiprocessing integration tests
+- [x] Installation and stub mode tests
+- [x] CI runs Python tests on all platforms
+
+---
+
+## v1.2 (Q2 2025) - Polish
 **Focus:** Better UX, stability, and documentation
 
 ### Usability
-- [ ] Better CLI output (colors, tables) ✅ *Ready*
+- [ ] Better CLI output (colors, tables)
 - [ ] Improved error messages
 - [ ] More examples (PyTorch, TensorFlow, JAX)
 - [ ] Jupyter notebook example
@@ -64,7 +98,7 @@ Like PostgreSQL, Redis, or Git:
 
 ---
 
-## v1.2 (Q2 2025) - Advanced Features
+## v1.3 (Q3 2025) - Advanced Features
 **Focus:** Power user features while keeping it simple
 
 ### Core Enhancements
@@ -283,4 +317,4 @@ A: Not breaking changes. We're committed to stability.
 
 ---
 
-*Last updated: October 2025*
+*Last updated: December 2025*

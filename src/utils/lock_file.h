@@ -35,6 +35,14 @@ class LockFile {
     ~LockFile();
 
     bool initializeLockDirectory();
+
+    std::string generateLockFilePathById(const std::string& partitionId) const;
+    bool createLockById(const std::string& partitionId, int deviceIdx, float memoryFraction,
+                        const std::string& username = "");
+    bool releaseLockById(const std::string& partitionId);
+    bool lockExistsById(const std::string& partitionId) const;
+    std::string getLockOwnerById(const std::string& partitionId) const;
+
     std::string generateLockFilePath(int deviceIdx, float memoryFraction) const;
     bool createLock(int deviceIdx, float memoryFraction, const std::string& partitionId,
                     const std::string& username = "");

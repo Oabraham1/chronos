@@ -106,6 +106,18 @@ float ChronosPartitioner::getGPUAvailablePercentage(int deviceIdx) {
     return pImpl->getGPUAvailablePercentage(deviceIdx);
 }
 
+int ChronosPartitioner::getExecutionMode() const {
+    // Currently using OpenCL backend which is time-sliced
+    // Will be updated when backend system is fully integrated
+    return 1;  // TIME_SLICED
+}
+
+std::string ChronosPartitioner::getBackendName() const {
+    // Currently using OpenCL backend
+    // Will be updated when backend system is fully integrated
+    return "OpenCL";
+}
+
 ChronosPartitioner::Impl::Impl()
     : platform(nullptr),
       context(nullptr),
@@ -204,8 +216,14 @@ void ChronosPartitioner::Impl::initializeEnforcers() {
 
 std::string ChronosPartitioner::Impl::generatePartitionId() {
     static int counter = 0;
+    int pid = platform::Platform::getInstance()->getProcessId();
+    auto now = std::chrono::system_clock::now();
+    auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
+        now.time_since_epoch()).count();
+
     std::stringstream ss;
-    ss << "partition_" << std::setfill('0') << std::setw(4) << ++counter;
+    ss << "partition_" << pid << "_" << timestamp << "_"
+       << std::setfill('0') << std::setw(4) << ++counter;
     return ss.str();
 }
 
@@ -249,7 +267,7 @@ void ChronosPartitioner::Impl::releasePartitionResources(core::GPUPartition& par
         if (device.id == partition.deviceId) {
             cl_ulong freedMemory = device.totalMemory * partition.memoryFraction;
             device.availableMemory += freedMemory;
-            lockFile.releaseLock(deviceIdx, partition.memoryFraction);
+            lockFile.releaseLockById(partition.partitionId);
             break;
         }
     }
@@ -278,16 +296,6 @@ bool ChronosPartitioner::Impl::canAccessGPU(int deviceIdx, float memoryFraction)
                   << "Available: " << (devices[deviceIdx].availableMemory / (1024 * 1024)) << " MB"
                   << std::endl;
         return false;
-    }
-
-    if (lockFile.lockExists(deviceIdx, memoryFraction)) {
-        std::string owner = lockFile.getLockOwner(deviceIdx, memoryFraction);
-        std::string currentUser = platform::Platform::getInstance()->getUsername();
-
-        if (owner != currentUser) {
-            std::cerr << "GPU partition is locked by user: " << owner << std::endl;
-            return false;
-        }
     }
 
     return true;
@@ -359,7 +367,7 @@ std::string ChronosPartitioner::Impl::createPartition(int deviceIdx, float memor
 
     std::string partitionId = generatePartitionId();
 
-    if (!lockFile.createLock(deviceIdx, memoryFraction, partitionId, partitionOwner)) {
+    if (!lockFile.createLockById(partitionId, deviceIdx, memoryFraction, partitionOwner)) {
         std::cerr << "Failed to create lock for GPU partition" << std::endl;
         return "";
     }
@@ -367,7 +375,7 @@ std::string ChronosPartitioner::Impl::createPartition(int deviceIdx, float memor
     if (enforcers.find(deviceIdx) != enforcers.end()) {
         if (!enforcers[deviceIdx]->allocatePartition(partitionId, requestedMemory)) {
             std::cerr << "Failed to allocate memory enforcer for partition" << std::endl;
-            lockFile.releaseLock(deviceIdx, memoryFraction);
+            lockFile.releaseLockById(partitionId);
             return "";
         }
     }

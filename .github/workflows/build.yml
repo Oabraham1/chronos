@@ -35,11 +35,21 @@ jobs:
         cd build
         make -j$(nproc)
     
-    - name: Test
+    - name: Test C++
       run: |
         cd build
         ctest --output-on-failure
-    
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Test Python
+      run: |
+        export LD_LIBRARY_PATH=$PWD/build/lib:$LD_LIBRARY_PATH
+        python -m unittest discover python/tests -v
+
     - name: Package Binary
       if: github.event_name == 'release'
       run: |
@@ -80,10 +90,20 @@ jobs:
         # Then build everything else
         cmake --build . --config Release
     
-    - name: Test
+    - name: Test C++
       run: |
         cd build
         ctest -C Release --output-on-failure
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Test Python
+      run: |
+        $env:PATH = "$PWD\build\lib\Release;$env:PATH"
+        python -m unittest discover python/tests -v
 
   build-macos:
     runs-on: macos-latest
@@ -103,11 +123,21 @@ jobs:
         cd build
         make -j$(sysctl -n hw.ncpu)
     
-    - name: Test
+    - name: Test C++
       run: |
         cd build
         ctest --output-on-failure
-    
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Test Python
+      run: |
+        export DYLD_LIBRARY_PATH=$PWD/build/lib:$DYLD_LIBRARY_PATH
+        python -m unittest discover python/tests -v
+
     - name: Package Binary
       if: github.event_name == 'release'
       run: |

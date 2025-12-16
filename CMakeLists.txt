@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(Chronos VERSION 1.0.1 LANGUAGES CXX)
+project(Chronos VERSION 1.1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -64,6 +64,12 @@ set(CHRONOS_SOURCES
     src/core/memory_enforcer.cpp
     src/utils/lock_file.cpp
     src/utils/time_utils.cpp
+    # Backend system
+    src/backends/backend_selector.cpp
+    src/backends/opencl_backend.cpp
+    src/backends/mps_backend.cpp
+    src/backends/rocm_backend.cpp
+    src/backends/stub_backend.cpp
 )
 
 if(CHRONOS_CONFIG_ENABLED)

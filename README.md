@@ -5,7 +5,6 @@
 [![CI](https://github.com/oabraham1/chronos/workflows/Chronos%20CI/badge.svg)](https://github.com/oabraham1/chronos/actions)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![PyPI](https://img.shields.io/pypi/v/chronos-gpu)](https://pypi.org/project/chronos-gpu/)
-[![Downloads](https://img.shields.io/pypi/dm/chronos-gpu)](https://pypi.org/project/chronos-gpu/)
 [![Documentation](https://img.shields.io/badge/docs-latest-brightgreen)](https://oabraham1.github.io/chronos/)
 
 > **Time-based GPU partitioning with automatic expiration**
@@ -133,6 +132,48 @@ Time-based partitions mean no resource hogging. Everyone gets their fair share.
 | User isolation | ✅ | ✅ | ❌ | ❌ |
 | Zero setup | ✅ | ❌ | ❌ | ❌ |
 | < 1% overhead | ✅ | ✅ | ✅ | ❌ |
+
+---
+
+## Execution Modes
+
+Chronos automatically selects the best execution backend for your system:
+
+### Concurrent Mode (NVIDIA MPS)
+- **True parallel execution** - Multiple partitions run simultaneously
+- **Hardware-enforced limits** - GPU resources physically partitioned
+- **Requirements**: NVIDIA GPU with Compute Capability 3.5+, CUDA driver
+
+### Time-Sliced Mode (OpenCL)
+- **Context switching** - Partitions take turns on the GPU
+- **Cross-vendor support** - Works with NVIDIA, AMD, Intel, Apple Silicon
+- **Requirements**: OpenCL 1.2+ runtime
+
+### Check Your Mode
+
+```python
+from chronos import Partitioner, check_concurrent_support
+
+# Check available backends
+print(check_concurrent_support())
+# {'nvidia_mps': True, 'rocm': False, 'opencl': True,
+#  'concurrent_possible': True, 'recommended': 'nvidia_mps'}
+
+# Check active mode
+p = Partitioner()
+print(f"Backend: {p.get_backend_name()}")  # "NVIDIA MPS" or "OpenCL"
+print(f"Mode: {p.get_execution_mode()}")    # "concurrent" or "time_sliced"
+```
+
+### Force a Specific Backend
+
+```bash
+# Force OpenCL even on NVIDIA systems
+export CHRONOS_BACKEND=opencl
+
+# Force MPS (will fail if not available)
+export CHRONOS_BACKEND=mps
+```
 
 ---
 
@@ -276,16 +317,26 @@ sudo make install
 └──────────────┬──────────────────────────┘
                │
 ┌──────────────▼──────────────────────────┐
-│         OpenCL Runtime Layer            │
+│          Backend Selector               │
+│   Auto-detects best execution mode      │
 └──────────────┬──────────────────────────┘
-               │
-┌──────────────▼──────────────────────────┐
+         ┌─────┼─────┬─────────┐
+         ▼     ▼     ▼         ▼
+┌──────────┐ ┌──────┐ ┌──────┐ ┌──────┐
+│NVIDIA MPS│ │ ROCm │ │OpenCL│ │ Stub │
+│(Concurrent)│ │(AMD) │ │(All) │ │(Test)│
+└─────┬────┘ └──┬───┘ └──┬───┘ └──────┘
+      │         │        │
+      ▼         ▼        ▼
+┌─────────────────────────────────────────┐
 │      GPU Hardware (Any Vendor)          │
 └─────────────────────────────────────────┘
 ```
 
 **Key Components:**
 - **C++ Core**: High-performance partition management
+- **Backend Selector**: Auto-detects optimal execution mode
+- **Multiple Backends**: NVIDIA MPS, AMD ROCm, OpenCL, Stub
 - **Python Bindings**: Easy-to-use API
 - **CLI Tool**: Command-line interface
 - **Monitor Thread**: Automatic expiration handling
@@ -306,15 +357,6 @@ We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ---
 
-## Community
-
-- **Discord**: [Join our community](https://discord.gg/chronos) *(coming soon)*
-- **Discussions**: [GitHub Discussions](https://github.com/oabraham1/chronos/discussions)
-- **Twitter**: [@oabraham1](https://twitter.com/chef_jiggy)
-- **Issues**: [Report bugs](https://github.com/oabraham1/chronos/issues)
-
----
-
 ## Citation
 
 If you use Chronos in research, please cite:
@@ -325,7 +367,7 @@ If you use Chronos in research, please cite:
   author={Abraham, Ojima},
   year={2025},
   url={https://github.com/oabraham1/chronos},
-  version={1.0.1}
+  version={1.1.0}
 }
 ```
 

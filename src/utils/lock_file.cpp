@@ -46,6 +46,63 @@ bool LockFile::initializeLockDirectory() {
     return platform::Platform::getInstance()->createDirectory(pImpl->basePath);
 }
 
+std::string LockFile::generateLockFilePathById(const std::string& partitionId) const {
+    std::stringstream ss;
+    ss << pImpl->basePath << partitionId << ".lock";
+    return ss.str();
+}
+
+bool LockFile::createLockById(const std::string& partitionId, int deviceIdx, float memoryFraction,
+                               const std::string& username) {
+    auto platform = platform::Platform::getInstance();
+    std::string lockFilePath = generateLockFilePathById(partitionId);
+
+    int pid = platform->getProcessId();
+    std::string actualUsername = username.empty() ? platform->getUsername() : username;
+    std::string hostname = platform->getHostname();
+    std::string timestamp = platform->getCurrentTimeString();
+
+    std::stringstream content;
+    content << "pid: " << pid << "\n"
+            << "user: " << actualUsername << "\n"
+            << "host: " << hostname << "\n"
+            << "time: " << timestamp << "\n"
+            << "device: " << deviceIdx << "\n"
+            << "fraction: " << memoryFraction << "\n"
+            << "partition: " << partitionId << "\n";
+
+    return platform->createLockFile(lockFilePath, content.str());
+}
+
+bool LockFile::releaseLockById(const std::string& partitionId) {
+    std::string lockFilePath = generateLockFilePathById(partitionId);
+    return platform::Platform::getInstance()->deleteFile(lockFilePath);
+}
+
+bool LockFile::lockExistsById(const std::string& partitionId) const {
+    std::string lockFilePath = generateLockFilePathById(partitionId);
+    return platform::Platform::getInstance()->fileExists(lockFilePath);
+}
+
+std::string LockFile::getLockOwnerById(const std::string& partitionId) const {
+    if (!lockExistsById(partitionId)) {
+        return "";
+    }
+
+    std::string lockFilePath = generateLockFilePathById(partitionId);
+    std::string content = platform::Platform::getInstance()->readFile(lockFilePath);
+
+    std::istringstream stream(content);
+    std::string line;
+    while (std::getline(stream, line)) {
+        if (line.compare(0, 6, "user: ") == 0) {
+            return line.substr(6);
+        }
+    }
+
+    return "";
+}
+
 std::string LockFile::generateLockFilePath(int deviceIdx, float memoryFraction) const {
     int memPercent = static_cast<int>(std::round(memoryFraction * 1000));
 

@@ -26,6 +26,7 @@
 #include <mutex>
 #include <string>
 
+#include "backends/backend_selector.h"
 #include "chronos.h"
 
 static std::string g_last_error;
@@ -190,5 +191,54 @@ void chronos_show_device_stats(ChronosPartitionerHandle handle) {
 const char* chronos_get_last_error(void) {
     std::lock_guard<std::mutex> lock(g_error_mutex);
     return g_last_error.c_str();
+}
+
+ChronosExecutionMode chronos_get_execution_mode(ChronosPartitionerHandle handle) {
+    if (!handle) {
+        return CHRONOS_MODE_STUB;
+    }
+
+    try {
+        chronos::ChronosPartitioner* partitioner =
+            static_cast<chronos::ChronosPartitioner*>(handle);
+
+        int mode = partitioner->getExecutionMode();
+        switch (mode) {
+            case 0:
+                return CHRONOS_MODE_CONCURRENT;
+            case 1:
+                return CHRONOS_MODE_TIME_SLICED;
+            default:
+                return CHRONOS_MODE_STUB;
+        }
+    } catch (const std::exception& e) {
+        set_last_error(std::string("Exception in get_execution_mode: ") + e.what());
+        return CHRONOS_MODE_STUB;
+    }
+}
+
+static std::string g_backend_name;
+static std::mutex g_backend_name_mutex;
+
+const char* chronos_get_backend_name(ChronosPartitionerHandle handle) {
+    if (!handle) {
+        return "Unknown";
+    }
+
+    try {
+        chronos::ChronosPartitioner* partitioner =
+            static_cast<chronos::ChronosPartitioner*>(handle);
+
+        std::lock_guard<std::mutex> lock(g_backend_name_mutex);
+        g_backend_name = partitioner->getBackendName();
+        return g_backend_name.c_str();
+    } catch (const std::exception& e) {
+        set_last_error(std::string("Exception in get_backend_name: ") + e.what());
+        return "Unknown";
+    }
+}
+
+int chronos_check_concurrent_support(void) {
+    return chronos::backends::BackendSelector::hasConcurrentSupport() ? 1 : 0;
 }
 }

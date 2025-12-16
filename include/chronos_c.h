@@ -43,6 +43,15 @@ typedef struct {
     int active;
 } ChronosPartitionInfo;
 
+/**
+ * Execution mode enum for C API
+ */
+typedef enum {
+    CHRONOS_MODE_CONCURRENT = 0,  /**< True parallel execution (MPS) */
+    CHRONOS_MODE_TIME_SLICED = 1, /**< Context switching (OpenCL) */
+    CHRONOS_MODE_STUB = 2         /**< No-op fallback */
+} ChronosExecutionMode;
+
 ChronosPartitionerHandle chronos_partitioner_create(void);
 
 void chronos_partitioner_destroy(ChronosPartitionerHandle handle);
@@ -61,6 +70,26 @@ float chronos_get_available_percentage(ChronosPartitionerHandle handle, int devi
 void chronos_show_device_stats(ChronosPartitionerHandle handle);
 
 const char* chronos_get_last_error(void);
+
+/**
+ * Get the execution mode of the partitioner
+ * @param handle Partitioner handle
+ * @return Execution mode (CHRONOS_MODE_CONCURRENT, CHRONOS_MODE_TIME_SLICED, or CHRONOS_MODE_STUB)
+ */
+ChronosExecutionMode chronos_get_execution_mode(ChronosPartitionerHandle handle);
+
+/**
+ * Get the name of the active backend
+ * @param handle Partitioner handle
+ * @return Backend name string (e.g., "NVIDIA MPS", "OpenCL", "ROCm")
+ */
+const char* chronos_get_backend_name(ChronosPartitionerHandle handle);
+
+/**
+ * Check if concurrent execution is supported on this system
+ * @return 1 if NVIDIA MPS is available, 0 otherwise
+ */
+int chronos_check_concurrent_support(void);
 
 #ifdef __cplusplus
 }
