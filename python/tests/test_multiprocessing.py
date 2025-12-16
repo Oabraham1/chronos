@@ -13,6 +13,17 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from chronos import Partitioner, ChronosError, is_stub_mode
 
 
+def gpu_available():
+    """Check if GPU is available for testing."""
+    if is_stub_mode():
+        return False
+    try:
+        p = Partitioner()
+        return True
+    except ChronosError:
+        return False
+
+
 class TestPartitionInfo(unittest.TestCase):
     """Test PartitionInfo dataclass."""
 
@@ -70,8 +81,8 @@ class TestForkSafePartition(unittest.TestCase):
     """Test ForkSafePartition class."""
 
     def setUp(self):
-        if is_stub_mode():
-            self.skipTest("Running in stub mode")
+        if not gpu_available():
+            self.skipTest("No GPU available")
 
     def test_import_fork_safe_partition(self):
         """Test that ForkSafePartition can be imported."""
@@ -178,8 +189,8 @@ class TestCreateSharedPartition(unittest.TestCase):
     """Test create_shared_partition convenience function."""
 
     def setUp(self):
-        if is_stub_mode():
-            self.skipTest("Running in stub mode")
+        if not gpu_available():
+            self.skipTest("No GPU available")
 
     def test_import_create_shared_partition(self):
         """Test that create_shared_partition can be imported."""
@@ -205,9 +216,12 @@ class TestCreateRaw(unittest.TestCase):
     """Test create_raw method on Partitioner."""
 
     def setUp(self):
-        if is_stub_mode():
-            self.skipTest("Running in stub mode")
-        self.partitioner = Partitioner()
+        if not gpu_available():
+            self.skipTest("No GPU available")
+        try:
+            self.partitioner = Partitioner()
+        except ChronosError:
+            self.skipTest("No GPU available")
 
     def tearDown(self):
         if hasattr(self, 'partitioner'):

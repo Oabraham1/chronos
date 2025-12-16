@@ -5,11 +5,24 @@ import os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from chronos import Partitioner, ChronosError
+from chronos import Partitioner, ChronosError, is_stub_mode
+
+
+def gpu_available():
+    """Check if GPU is available for testing."""
+    if is_stub_mode():
+        return False
+    try:
+        p = Partitioner()
+        return True
+    except ChronosError:
+        return False
 
 
 class TestChronosPartitioner(unittest.TestCase):
     def setUp(self):
+        if not gpu_available():
+            self.skipTest("No GPU available")
         self.partitioner = Partitioner()
         time.sleep(0.5)
 

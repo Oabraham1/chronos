@@ -24,6 +24,7 @@
 
 #include <algorithm>
 #include <array>
+#include <atomic>
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>

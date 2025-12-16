@@ -23,6 +23,7 @@
 #include "backends/opencl_backend.h"
 
 #include <algorithm>
+#include <atomic>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
