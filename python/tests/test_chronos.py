@@ -14,6 +14,9 @@ def gpu_available():
         return False
     try:
         p = Partitioner()
+        # Actually try to create a partition to verify GPU works
+        partition = p.create(device=0, memory=0.01, duration=5)
+        partition.release()
         return True
     except ChronosError:
         return False
